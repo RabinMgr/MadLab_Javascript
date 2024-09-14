@@ -9,6 +9,20 @@ async function fetchData(){
 
         const data = await response.json();
         console.log(data);
+
+        const bookList = document.getElementById('books');
+        bookList.innerHTML = "";  
+        data.results.forEach(book => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `
+                Title: ${book.title}
+                ID: ${book.id}
+                Subjects: ${book.subjects.join(', ')}
+            `;
+            bookList.appendChild(listItem);
+
+        })   
+              
     }
     catch(error){
         console.error(error);
@@ -16,3 +30,4 @@ async function fetchData(){
 }
 
 fetchData();
+
