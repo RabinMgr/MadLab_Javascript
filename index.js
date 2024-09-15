@@ -1,13 +1,11 @@
 let url = "https://gutendex.com/books/";
 
-
 async function fetchData(url) {
     try {
 
         let foundBook = false;
         let page = 1;
         const search = document.getElementById('search');
-        console.log(search)
         const bookList = document.getElementById('books');
         
         while(!foundBook && url){
@@ -21,9 +19,11 @@ async function fetchData(url) {
             console.log("page number: ", page);
             url = data.next;
             page+=1; 
-        }
-        if (!foundBook) {
-            console.log("The book 'Short Stories' by 'Dostoyevsky, Fyodor' was not found.");
+
+            if (!url) {
+                console.log("No more pages to check. Book was not found");
+                break;
+            }
         }
 
         const response = await fetch(url);
