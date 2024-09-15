@@ -13,13 +13,15 @@ async function fetchData() {
         const sortedData = sortData(data.results); 
         // Set subjects entries to uppercase
         const transformedData = transformData(sortedData);  
+        // Remove entries whose author didn't exist within the last 200 years.
+        const filteredData = filterData(transformedData);
 
         
         const bookList = document.getElementById('books');
         bookList.innerHTML = "";  
 
         //Display the data
-        transformedData.forEach(book => {
+        filteredData.forEach(book => {
             const listItem = document.createElement('li');
             listItem.textContent = `
                 Title: ${book.title}
@@ -46,5 +48,17 @@ function transformData(data) {
         subjects: (book.subjects || []).map(subject => subject.toUpperCase())
     }));
 }
+// Dates
+function filterData(books) {
+    const startYear = new Date().getFullYear() - 200;
+
+    return books.filter(book => {
+        if (!Array.isArray(book.authors)) {
+            return false;
+        }
+        return book.authors.some(author => author.birth_year >= startYear);
+    });
+}
+
 
 fetchData();
